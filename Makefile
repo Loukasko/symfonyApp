@@ -22,7 +22,7 @@ php-composer-run:
 		--workdir=/app \
 		--user $(shell id -u):$(shell id -g) \
 		--env COMPOSER_CACHE_DIR=/vendor-cache \
-		--volume "$(PWD)":/app \
+		--volume "$(PWD)/app":/app \
 		--volume "$(PWD)/vendor-cache":/vendor-cache \
 		php-composer ${COMMAND}
 
@@ -32,29 +32,29 @@ php-composer-build:
 		devenv/php
 
 composer-require:
-	make composer-run COMMAND="composer require ${COMMAND}"
+	make composer-run COMMAND="require ${COMMAND}"
 
 dump-autoload:
-	make composer-run COMMAND="composer dump-autoload"
+	make composer-run COMMAND="dump-autoload"
 
 tests:
 	make composer-run COMMAND="bin/phpunit"
 
-php-cli-build:
+php-build:
 	docker build \
-		--tag php:custom \
+		--tag php \
 		devenv/php-cli
 
-php-cli-run:
-	make php-cli-build
+php-run:
+	make php-build
 	docker run \
 		--rm \
 		--tty \
 		--interactive \
 		--workdir=/app \
 		--user $(shell id -u):$(shell id -g) \
-		--volume "$(PWD)":/app \
-		php:custom ${COMMAND}
+		--volume "$(PWD)/app":/app \
+		php ${COMMAND}
 
 clear-cache:
-	make php-cli-run COMMAND="bin/console cache:clear --no-warmup --env=prod"
+	make php-run COMMAND="bin/console cache:clear --no-warmup --env=prod"
