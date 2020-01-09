@@ -7,14 +7,14 @@ services:
       - 80:80
     volumes:
       - ./devenv/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:cached
-      - ./app/public:/app/public:cached
+      - ./app/public:/var/www/html/public
     depends_on:
       - php
 
   php:
     build: ./devenv/php/
     volumes:
-      - ./app:/app:cached
+      - ./app:/var/www/html
 
   mongo:
     image: mongo

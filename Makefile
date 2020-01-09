@@ -43,7 +43,7 @@ tests:
 php-build:
 	docker build \
 		--tag php \
-		devenv/php-cli
+		devenv/php
 
 php-run:
 	make php-build
